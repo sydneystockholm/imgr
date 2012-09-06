@@ -1,0 +1,31 @@
+{
+  "name": "imgr",
+  "version": "0.1.0",
+  "description": "Image resizing, cropping, optimisation and serving",
+  "main": "index.js",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/SydneyStockholm/imgr"
+  },
+  "keywords": [
+    "image",
+    "resize",
+    "resizing",
+    "crop",
+    "cropping",
+    "adaptive",
+    "optimization",
+    "optimisation"
+  ],
+  "dependencies": {
+    "gm": "*"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "author": "Sydney Stockholm <opensource@sydneystockholm.com",
+  "license": "MIT"
+}
