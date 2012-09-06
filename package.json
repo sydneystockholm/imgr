@@ -21,7 +21,9 @@
     "optimisation"
   ],
   "dependencies": {
-    "gm": "*"
+    "gm": "*",
+    "mkdirp": "*",
+    "express": "*"
   },
   "devDependencies": {
     "mocha": "*"
