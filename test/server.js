@@ -57,8 +57,19 @@ describe('Server', function () {
     });
 
     it('should serve images with a custom width', function (done) {
-        //TODO
-        done();
+        var app = server();
+        imgr.serve(images)
+            .namespace('/foo')
+            .cacheDir(compiled)
+            .using(app);
+        assert.statusCode(app.host + '/foo/200x/1.jpg', 200, function () {
+            app.server.close()
+            gm(compiled + '200x/1.jpg').size(function (err, size) {
+                assert(!err, err);
+                assert.equal(size.width, 200);
+                done();
+            });
+        });
     });
 
     it('should serve images with a custom height', function (done) {
