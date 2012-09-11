@@ -26,7 +26,8 @@
     "express": "*"
   },
   "devDependencies": {
-    "mocha": "*"
+    "mocha": "*",
+    "request": "*"
   },
   "author": "Sydney Stockholm <opensource@sydneystockholm.com",
   "license": "MIT"
