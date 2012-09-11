@@ -34,10 +34,12 @@ describe('Server', function () {
             .namespace('/foo')
             .using(app);
         assert.statusCode(app.host + '/foo/1.jpg', 200, function () {
-            assert.statusCode(app.host + '/foo/2.png', 200, function () {
-                assert.statusCode(app.host + '/foo/nothere.jpg', 404, function () {
-                    app.server.close()
-                    done();
+            assert.statusCode(app.host + '/foo/nested/folder/1.jpg', 200, function () {
+                assert.statusCode(app.host + '/foo/2.png', 200, function () {
+                    assert.statusCode(app.host + '/foo/nothere.jpg', 404, function () {
+                        app.server.close()
+                        done();
+                    });
                 });
             });
         });
@@ -47,10 +49,12 @@ describe('Server', function () {
         var app = server();
         imgr.serve(images).using(app);
         assert.statusCode(app.host + '/1.jpg', 200, function () {
-            assert.statusCode(app.host + '/2.png', 200, function () {
-                assert.statusCode(app.host + '/nothere.jpg', 404, function () {
-                    app.server.close();
-                    done();
+            assert.statusCode(app.host + '/nested/folder/1.jpg', 200, function () {
+                assert.statusCode(app.host + '/2.png', 200, function () {
+                    assert.statusCode(app.host + '/nothere.jpg', 404, function () {
+                        app.server.close();
+                        done();
+                    });
                 });
             });
         });
@@ -63,43 +67,144 @@ describe('Server', function () {
             .cacheDir(compiled)
             .using(app);
         assert.statusCode(app.host + '/foo/200x/1.jpg', 200, function () {
-            app.server.close()
             gm(compiled + '200x/1.jpg').size(function (err, size) {
                 assert(!err, err);
                 assert.equal(size.width, 200);
-                done();
+                assert.statusCode(app.host + '/foo/nested/folder/200x/1.jpg', 200, function () {
+                    gm(compiled + 'nested/folder/200x/1.jpg').size(function (err, size) {
+                        assert(!err, err);
+                        assert.equal(size.width, 200);
+                        app.server.close()
+                        done();
+                    });
+                });
             });
         });
     });
 
     it('should serve images with a custom height', function (done) {
-        //TODO
-        done();
+        var app = server();
+        imgr.serve(images)
+            .namespace('/foo')
+            .cacheDir(compiled)
+            .using(app);
+        assert.statusCode(app.host + '/foo/x200/1.jpg', 200, function () {
+            gm(compiled + 'x200/1.jpg').size(function (err, size) {
+                assert(!err, err);
+                assert.equal(size.height, 200);
+                assert.statusCode(app.host + '/foo/nested/folder/x200/1.jpg', 200, function () {
+                    gm(compiled + 'nested/folder/x200/1.jpg').size(function (err, size) {
+                        assert(!err, err);
+                        assert.equal(size.height, 200);
+                        app.server.close()
+                        done();
+                    });
+                });
+            });
+        });
     });
 
     it('should serve images with a custom width and height', function (done) {
-        //TODO
-        done();
+        var app = server();
+        imgr.serve(images)
+            .namespace('/foo')
+            .cacheDir(compiled)
+            .using(app);
+        assert.statusCode(app.host + '/foo/300x200/1.jpg', 200, function () {
+            gm(compiled + '300x200/1.jpg').size(function (err, size) {
+                assert(!err, err);
+                assert.equal(size.width, 300);
+                assert.equal(size.height, 200);
+                assert.statusCode(app.host + '/foo/nested/folder/300x200/1.jpg', 200, function () {
+                    gm(compiled + 'nested/folder/300x200/1.jpg').size(function (err, size) {
+                        assert(!err, err);
+                        assert.equal(size.width, 300);
+                        assert.equal(size.height, 200);
+                        app.server.close()
+                        done();
+                    });
+                });
+            });
+        });
     });
 
     it('should serve images with a custom width, height and orientation', function (done) {
-        //TODO
-        done();
+        var app = server();
+        imgr.serve(images)
+            .namespace('/foo')
+            .cacheDir(compiled)
+            .using(app);
+        assert.statusCode(app.host + '/foo/300x200-top/1.jpg', 200, function () {
+            gm(compiled + '300x200-top/1.jpg').size(function (err, size) {
+                assert(!err, err);
+                assert.equal(size.width, 300);
+                assert.equal(size.height, 200);
+                assert.statusCode(app.host + '/foo/nested/folder/300x200-top/1.jpg', 200, function () {
+                    gm(compiled + 'nested/folder/300x200-top/1.jpg').size(function (err, size) {
+                        assert(!err, err);
+                        assert.equal(size.width, 300);
+                        assert.equal(size.height, 200);
+                        app.server.close()
+                        done();
+                    });
+                });
+            });
+        });
     });
 
     it('should respect the whitelist', function (done) {
-        //TODO
-        done();
+        var app = server();
+        imgr.serve(images)
+            .namespace('/foo')
+            .cacheDir(compiled)
+            .whitelist([ '200x', '300x300' ])
+            .using(app);
+        assert.statusCode(app.host + '/foo/300x300/1.jpg', 200, function () {
+            assert.statusCode(app.host + '/foo/200x/1.jpg', 200, function () {
+                assert.statusCode(app.host + '/foo/300x/1.jpg', 403, function () {
+                    done();
+                });
+            });
+        });
     });
 
     it('should respect the blacklist', function (done) {
-        //TODO
-        done();
+        var app = server();
+        imgr.serve(images)
+            .namespace('/foo')
+            .cacheDir(compiled)
+            .blacklist([ '400x' ])
+            .using(app);
+        assert.statusCode(app.host + '/foo/400x400/1.jpg', 200, function () {
+            assert.statusCode(app.host + '/foo/400x/1.jpg', 403, function () {
+                done();
+            });
+        });
     });
 
     it('should support a custom rewriting strategy', function (done) {
-        //TODO
-        done();
+        var app = server();
+        imgr.serve(images)
+            .namespace('/foo')
+            .urlRewrite('/:path/:file-:size.:ext')
+            .cacheDir(compiled)
+            .using(app);
+        assert.statusCode(app.host + '/foo/1-300x200-top.jpg', 200, function () {
+            gm(compiled + '1-300x200-top.jpg').size(function (err, size) {
+                assert(!err, err);
+                assert.equal(size.width, 300);
+                assert.equal(size.height, 200);
+                assert.statusCode(app.host + '/foo/nested/folder/1-300x200-top.jpg', 200, function () {
+                    gm(compiled + 'nested/folder/1-300x200-top.jpg').size(function (err, size) {
+                        assert(!err, err);
+                        assert.equal(size.width, 300);
+                        assert.equal(size.height, 200);
+                        app.server.close()
+                        done();
+                    });
+                });
+            });
+        });
     });
 
 });

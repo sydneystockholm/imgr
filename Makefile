@@ -14,6 +14,7 @@ dependencies:
 deps: dependencies
 
 test:
+	@rm -rf ./test/tmp
 	@./node_modules/mocha/bin/mocha \
 		--reporter ${REPORTER} \
 		-s 200 \
