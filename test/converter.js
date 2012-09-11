@@ -32,32 +32,69 @@ describe('Converter', function () {
                     done();
                 });
             });
-        done();
     });
 
     it('should resize to an exact width', function (done) {
-        //TODO
-        done();
+        imgr.load(images + '1.jpg')
+            .resizeToWidth(100)
+            .save(tmp + '1-100width.jpg', function (err) {
+                gm(tmp + '1-100width.jpg').size(function (err, size) {
+                    assert(!err, err);
+                    assert.equals(size.width, 100);
+                    done();
+                });
+            });
     });
 
     it('should resize to an exact height', function (done) {
-        //TODO
-        done();
+        imgr.load(images + '1.jpg')
+            .resizeToHeight(100)
+            .save(tmp + '1-100height.jpg', function (err) {
+                gm(tmp + '1-100height.jpg').size(function (err, size) {
+                    assert(!err, err);
+                    assert.equals(size.height, 100);
+                    done();
+                });
+            });
     });
 
     it('should resize by a factor', function (done) {
-        //TODO
-        done();
+        imgr.load(images + '1.jpg')
+            .resizeByFactor(0.5)
+            .save(tmp + '1-halfsize.jpg', function (err) {
+                gm(tmp + '1-halfsize.jpg').size(function (err, size) {
+                    assert(!err, err);
+                    assert.equals(size.width, 362);
+                    assert.equals(size.height, 188);
+                    done();
+                });
+            });
     });
 
     it('should resize adaptively with aspect ratio > 1', function (done) {
-        //TODO
-        done();
+        imgr.load(images + '1.jpg')
+            .adaptiveResize(200, 300)
+            .save(tmp + '1-200x300.jpg', function (err) {
+                gm(tmp + '1-200x300.jpg').size(function (err, size) {
+                    assert(!err, err);
+                    assert.equals(size.width, 200);
+                    assert.equals(size.height, 300);
+                    done();
+                });
+            });
     });
 
     it('should resize adaptively with aspect ratio < 1', function (done) {
-        //TODO
-        done();
+        imgr.load(images + '2.jpg')
+            .adaptiveResize(300, 200)
+            .save(tmp + '2-300x200.jpg', function (err) {
+                gm(tmp + '2-300x200.jpg').size(function (err, size) {
+                    assert(!err, err);
+                    assert.equals(size.width, 300);
+                    assert.equals(size.height, 200);
+                    done();
+                });
+            });
     });
 
 });
