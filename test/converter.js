@@ -38,6 +38,7 @@ describe('Converter', function () {
         imgr.load(images + '1.jpg')
             .resizeToWidth(100)
             .save(tmp + '1-100width.jpg', function (err) {
+                assert(!err, err);
                 gm(tmp + '1-100width.jpg').size(function (err, size) {
                     assert(!err, err);
                     assert.equals(size.width, 100);
@@ -50,6 +51,7 @@ describe('Converter', function () {
         imgr.load(images + '1.jpg')
             .resizeToHeight(100)
             .save(tmp + '1-100height.jpg', function (err) {
+                assert(!err, err);
                 gm(tmp + '1-100height.jpg').size(function (err, size) {
                     assert(!err, err);
                     assert.equals(size.height, 100);
@@ -62,6 +64,7 @@ describe('Converter', function () {
         imgr.load(images + '1.jpg')
             .resizeByFactor(0.5)
             .save(tmp + '1-halfsize.jpg', function (err) {
+                assert(!err, err);
                 gm(tmp + '1-halfsize.jpg').size(function (err, size) {
                     assert(!err, err);
                     assert.equals(size.width, 362);
@@ -75,6 +78,7 @@ describe('Converter', function () {
         imgr.load(images + '1.jpg')
             .adaptiveResize(200, 300)
             .save(tmp + '1-200x300.jpg', function (err) {
+                assert(!err, err);
                 gm(tmp + '1-200x300.jpg').size(function (err, size) {
                     assert(!err, err);
                     assert.equals(size.width, 200);
@@ -88,6 +92,7 @@ describe('Converter', function () {
         imgr.load(images + '2.jpg')
             .adaptiveResize(300, 200)
             .save(tmp + '2-300x200.jpg', function (err) {
+                assert(!err, err);
                 gm(tmp + '2-300x200.jpg').size(function (err, size) {
                     assert(!err, err);
                     assert.equals(size.width, 300);
