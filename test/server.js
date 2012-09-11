@@ -14,7 +14,7 @@ var port = 12345;
 function server() {
     var app = express();
     app.host = 'http://localhost:' + port;
-    app.listen(port++);
+    app.server = app.listen(port++);
     return app;
 }
 
@@ -34,9 +34,9 @@ describe('Server', function () {
             .namespace('/foo')
             .using(app);
         assert.statusCode(app.host + '/foo/1.jpg', 200, function () {
-            assert.statusCode(app.host + '/foo/2.jpg', 200, function () {
-                assert.statusCode(app.host + '/foo/3.jpg', 404, function () {
-                    app.close()
+            assert.statusCode(app.host + '/foo/2.png', 200, function () {
+                assert.statusCode(app.host + '/foo/nothere.jpg', 404, function () {
+                    app.server.close()
                     done();
                 });
             });
@@ -47,9 +47,9 @@ describe('Server', function () {
         var app = server();
         imgr.serve(images).using(app);
         assert.statusCode(app.host + '/1.jpg', 200, function () {
-            assert.statusCode(app.host + '/2.jpg', 200, function () {
-                assert.statusCode(app.host + '/3.jpg', 404, function () {
-                    app.close();
+            assert.statusCode(app.host + '/2.png', 200, function () {
+                assert.statusCode(app.host + '/nothere.jpg', 404, function () {
+                    app.server.close();
                     done();
                 });
             });
