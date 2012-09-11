@@ -18,6 +18,7 @@ test:
 		--reporter ${REPORTER} \
 		-s 200 \
 		-t 2000 $T
+	@rm -rf ./test/tmp
 
 check: test
 
