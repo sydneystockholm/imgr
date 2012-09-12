@@ -162,10 +162,12 @@ describe('Server', function () {
             .whitelist([ '200x', '300x300' ])
             .using(app);
         assert.statusCode(app.host + '/foo/300x300/1.jpg', 200, function () {
-            assert.statusCode(app.host + '/foo/200x/1.jpg', 200, function () {
-                assert.statusCode(app.host + '/foo/300x/1.jpg', 403, function () {
-                    app.server.close();
-                    done();
+            assert.statusCode(app.host + '/foo/300x300-centre/1.jpg', 200, function () {
+                assert.statusCode(app.host + '/foo/200x/1.jpg', 200, function () {
+                    assert.statusCode(app.host + '/foo/300x/1.jpg', 403, function () {
+                        app.server.close();
+                        done();
+                    });
                 });
             });
         });
@@ -176,12 +178,14 @@ describe('Server', function () {
         imgr().serve(images)
             .namespace('/foo')
             .cacheDir(compiled)
-            .blacklist([ '400x' ])
+            .blacklist([ '400x', '500x500' ])
             .using(app);
         assert.statusCode(app.host + '/foo/400x400/1.jpg', 200, function () {
-            assert.statusCode(app.host + '/foo/400x/1.jpg', 403, function () {
-                app.server.close();
-                done();
+            assert.statusCode(app.host + '/foo/500x500-centre/1.jpg', 403, function () {
+                assert.statusCode(app.host + '/foo/400x/1.jpg', 403, function () {
+                    app.server.close();
+                    done();
+                });
             });
         });
     });
