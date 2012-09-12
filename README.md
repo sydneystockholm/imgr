@@ -1,16 +1,8 @@
 **imgr** - resize, optimise and serve your images.
 
-## Installation
-
-**imgr** requires [graphicsmagick](http://www.graphicsmagick.org/)
-
-```bash
-$ npm install imgr
-```
-
 ## Example
 
-Serve images from a directory 
+Serve images from a directory
 
 ```javascript
 var IMGR = require('imgr').IMGR;
@@ -29,6 +21,18 @@ imgr.serve('/path/to/images')
 //    /images/200x300/foobar.jpg
 //    /images/1024x1024/foobar.jpg => 403 forbidden
 ```
+
+## Installation
+
+**imgr** requires [graphicsmagick](http://www.graphicsmagick.org/)
+
+```bash
+$ npm install imgr
+```
+
+## Documentation
+
+See the [wiki](https://github.com/sydneystockholm/imgr/wiki/imgr)
 
 ## Tests
 
