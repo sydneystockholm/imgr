@@ -8,7 +8,9 @@ var assert = require('assert')
 var images = __dirname + '/images/'
   , compiled = __dirname + '/tmp/compiled/';
 
-var imgr = new IMGR;
+var imgr = function () {
+    return new IMGR;
+}
 
 var port = 12345;
 function server() {
@@ -30,7 +32,7 @@ describe('Server', function () {
 
     it('should serve images from a directory under a custom namespace', function (done) {
         var app = server();
-        imgr.serve(images)
+        imgr().serve(images)
             .namespace('/foo')
             .using(app);
         assert.statusCode(app.host + '/foo/1.jpg', 200, function () {
@@ -47,7 +49,7 @@ describe('Server', function () {
 
     it('should serve images from a directory', function (done) {
         var app = server();
-        imgr.serve(images).using(app);
+        imgr().serve(images).using(app);
         assert.statusCode(app.host + '/1.jpg', 200, function () {
             assert.statusCode(app.host + '/nested/folder/1.jpg', 200, function () {
                 assert.statusCode(app.host + '/2.png', 200, function () {
@@ -62,7 +64,7 @@ describe('Server', function () {
 
     it('should serve images with a custom width', function (done) {
         var app = server();
-        imgr.serve(images)
+        imgr().serve(images)
             .namespace('/foo')
             .cacheDir(compiled)
             .using(app);
@@ -84,7 +86,7 @@ describe('Server', function () {
 
     it('should serve images with a custom height', function (done) {
         var app = server();
-        imgr.serve(images)
+        imgr().serve(images)
             .namespace('/foo')
             .cacheDir(compiled)
             .using(app);
@@ -106,7 +108,7 @@ describe('Server', function () {
 
     it('should serve images with a custom width and height', function (done) {
         var app = server();
-        imgr.serve(images)
+        imgr().serve(images)
             .namespace('/foo')
             .cacheDir(compiled)
             .using(app);
@@ -130,7 +132,7 @@ describe('Server', function () {
 
     it('should serve images with a custom width, height and orientation', function (done) {
         var app = server();
-        imgr.serve(images)
+        imgr().serve(images)
             .namespace('/foo')
             .cacheDir(compiled)
             .using(app);
@@ -154,7 +156,7 @@ describe('Server', function () {
 
     it('should respect the whitelist', function (done) {
         var app = server();
-        imgr.serve(images)
+        imgr().serve(images)
             .namespace('/foo')
             .cacheDir(compiled)
             .whitelist([ '200x', '300x300' ])
@@ -170,7 +172,7 @@ describe('Server', function () {
 
     it('should respect the blacklist', function (done) {
         var app = server();
-        imgr.serve(images)
+        imgr().serve(images)
             .namespace('/foo')
             .cacheDir(compiled)
             .blacklist([ '400x' ])
@@ -184,7 +186,7 @@ describe('Server', function () {
 
     it('should support a custom rewriting strategy', function (done) {
         var app = server();
-        imgr.serve(images)
+        imgr().serve(images)
             .namespace('/foo')
             .urlRewrite('/:path/:file-:size.:ext')
             .cacheDir(compiled)

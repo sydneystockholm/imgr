@@ -16,6 +16,7 @@ deps: dependencies
 test:
 	@rm -rf ./test/tmp
 	@./node_modules/mocha/bin/mocha \
+		--bail \
 		--reporter ${REPORTER} \
 		-s 200 \
 		-t 2000 $T
