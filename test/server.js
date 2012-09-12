@@ -8,9 +8,9 @@ var assert = require('assert')
 var images = __dirname + '/images/'
   , compiled = __dirname + '/tmp/compiled/';
 
-var imgr = function () {
-    return new IMGR;
-}
+var imgr = function (options) {
+    return new IMGR(options);
+};
 
 var port = 12345;
 function server() {
@@ -39,7 +39,7 @@ describe('Server', function () {
             assert.statusCode(app.host + '/foo/nested/folder/1.jpg', 200, function () {
                 assert.statusCode(app.host + '/foo/2.png', 200, function () {
                     assert.statusCode(app.host + '/foo/nothere.jpg', 404, function () {
-                        app.server.close()
+                        app.server.close();
                         done();
                     });
                 });
@@ -76,7 +76,7 @@ describe('Server', function () {
                     gm(compiled + 'nested/folder/200x/1.jpg').size(function (err, size) {
                         assert(!err, err);
                         assert.equal(size.width, 200);
-                        app.server.close()
+                        app.server.close();
                         done();
                     });
                 });
@@ -98,7 +98,7 @@ describe('Server', function () {
                     gm(compiled + 'nested/folder/x200/1.jpg').size(function (err, size) {
                         assert(!err, err);
                         assert.equal(size.height, 200);
-                        app.server.close()
+                        app.server.close();
                         done();
                     });
                 });
@@ -122,7 +122,7 @@ describe('Server', function () {
                         assert(!err, err);
                         assert.equal(size.width, 300);
                         assert.equal(size.height, 200);
-                        app.server.close()
+                        app.server.close();
                         done();
                     });
                 });
@@ -146,7 +146,7 @@ describe('Server', function () {
                         assert(!err, err);
                         assert.equal(size.width, 300);
                         assert.equal(size.height, 200);
-                        app.server.close()
+                        app.server.close();
                         done();
                     });
                 });
@@ -164,6 +164,7 @@ describe('Server', function () {
         assert.statusCode(app.host + '/foo/300x300/1.jpg', 200, function () {
             assert.statusCode(app.host + '/foo/200x/1.jpg', 200, function () {
                 assert.statusCode(app.host + '/foo/300x/1.jpg', 403, function () {
+                    app.server.close();
                     done();
                 });
             });
@@ -179,6 +180,7 @@ describe('Server', function () {
             .using(app);
         assert.statusCode(app.host + '/foo/400x400/1.jpg', 200, function () {
             assert.statusCode(app.host + '/foo/400x/1.jpg', 403, function () {
+                app.server.close();
                 done();
             });
         });
@@ -201,10 +203,30 @@ describe('Server', function () {
                         assert(!err, err);
                         assert.equal(size.width, 300);
                         assert.equal(size.height, 200);
-                        app.server.close()
+                        app.server.close();
                         done();
                     });
                 });
+            });
+        });
+    });
+
+    it('should redirect if there\'s a querystring and querystring_301 is true', function (done) {
+        var app = server();
+        imgr({ querystring_301: true }).serve(images)
+            .namespace('/foo')
+            .using(app);
+        assert.statusCode(app.host + '/foo/1.jpg?foo', 200, function () {
+            app.server.close();
+            app = server();
+            imgr({ querystring_301: true }).serve(images)
+                .namespace('/foo')
+                .using(app);
+            request({ url: app.host + '/foo/1.jpg?foo', followRedirect: false }, function (err, res, body) {
+                assert(!err, err);
+                assert.equal(res.statusCode, 301);
+                app.server.close();
+                done();
             });
         });
     });
