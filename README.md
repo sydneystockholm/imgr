@@ -7,7 +7,7 @@ Serve images from a directory
 ```javascript
 var IMGR = require('imgr').IMGR;
 
-var imgr = new IMGR({ concurrency: 5 });
+var imgr = new IMGR;
 
 imgr.serve('/path/to/images')
     .namespace('/images')
