@@ -1,8 +1,10 @@
-**imgr** - resize, optimise and serve your images.
+# IMGR
 
-## Example
+Resize and optimise images on-demand.
 
-Serve images from a directory
+### Example
+
+IMGR runs as [express](http://expressjs.com) middleware and requires [GraphicsMagick](http://www.graphicsmagick.org/)
 
 ```javascript
 var IMGR = require('imgr').IMGR;
@@ -13,35 +15,40 @@ imgr.serve('/path/to/images')
     .namespace('/images')
     .urlRewrite('/:path/:size/:file.:ext')
     .whitelist([ '200x300', '100x100' ])
-    .cacheDir('/tmp/imgr')
     .using(express_app);
-
-// Now /path/to/images/foobar.jpg can be accessed using:
-//    /images/foobar.jpg
-//    /images/200x300/foobar.jpg
-//    /images/1024x1024/foobar.jpg => 403 forbidden
 ```
 
-## Installation
+Now */path/to/images/foobar.jpg* can be accessed using
 
-**imgr** requires [graphicsmagick](http://www.graphicsmagick.org/)
+- */images/foobar.jpg*
+- */images/200x300/foobar.jpg*
+- */images/1024x1024/foobar.jpg* => 403 forbidden
+
+### Installation
 
 ```bash
 $ npm install imgr
 ```
 
-## Documentation
+### Documentation
 
-See the [wiki](https://github.com/sydneystockholm/imgr/wiki/imgr)
+See the [wiki](https://github.com/sydneystockholm/imgr/wiki/imgr).
 
-## Tests
+### Tests
+
+To run the test suite
 
 ```bash
-$ make dependencies
-$ make test
+$ make check
 ```
 
-## License (MIT)
+To increase test verbosity
+
+```bash
+$ V=1 make check
+```
+
+### License (MIT)
 
 Copyright (c) 2012 Sydney Stockholm <opensource@sydneystockholm.com>
 

@@ -9,11 +9,11 @@ ifdef TEST
 endif
 
 dependencies:
-	@npm install -d
+	@npm install -s
 
 deps: dependencies
 
-test:
+test: deps
 	@rm -rf ./test/tmp
 	@./node_modules/mocha/bin/mocha \
 		--bail \
