@@ -25,7 +25,8 @@
   "dependencies": {
     "gm": "*",
     "mkdirp": "*",
-    "express": "*"
+    "express": "*",
+    "ssasync": "*"
   },
   "devDependencies": {
     "mocha": "*",
