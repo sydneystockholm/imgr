@@ -62,6 +62,15 @@ describe('Server', function () {
         });
     });
 
+    it('should not serve images from the content directory if try_content is false', function (done) {
+        var app = server();
+        imgr({ try_content: false }).serve(images).using(app);
+        assert.statusCode(app.host + '/1.jpg', 404, function () {
+            app.server.close();
+            done();
+        });
+    });
+
     it('should serve images with a custom width', function (done) {
         var app = server();
         imgr().serve(images)
@@ -74,6 +83,28 @@ describe('Server', function () {
                 assert.equal(size.width, 200);
                 assert.statusCode(app.host + '/foo/nested/folder/200x/1.jpg', 200, function () {
                     gm(compiled + 'nested/folder/200x/1.jpg').size(function (err, size) {
+                        assert(!err, err);
+                        assert.equal(size.width, 200);
+                        app.server.close();
+                        done();
+                    });
+                });
+            });
+        });
+    });
+
+    it('should force a resize of images if try_cache is false', function (done) {
+        var app = server();
+        imgr({ try_cache: false }).serve(images)
+            .namespace('/foo')
+            .cacheDir(compiled)
+            .using(app);
+        assert.statusCode(app.host + '/foo/200x/1.jpg', 200, function () {
+            gm(compiled + '200x/1.jpg').size(function (err, size) {
+                assert(!err, err);
+                assert.equal(size.width, 200);
+                assert.statusCode(app.host + '/foo/200x/1.jpg', 200, function () {
+                    gm(compiled + '200x/1.jpg').size(function (err, size) {
                         assert(!err, err);
                         assert.equal(size.width, 200);
                         app.server.close();
