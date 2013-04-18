@@ -23,7 +23,7 @@ function server() {
 assert.statusCode = function (path, code, callback) {
     request(path, function (err, res, body) {
         assert(!err, err);
-        assert.equal(res.statusCode, code);
+        assert.equal(res.statusCode, code, path + ' failed (' + res.statusCode + ')');
         callback();
     });
 };
@@ -241,6 +241,26 @@ describe('Server', function () {
                         app.server.close();
                         done();
                     });
+                });
+            });
+        });
+    });
+
+    it('should support a rewriting strategy without the extension', function (done) {
+        var app = server();
+        imgr().serve(images)
+            .namespace('/foo')
+            .urlRewrite('/:path/:size/:file')
+            .cacheDir(compiled)
+            .using(app);
+        assert.statusCode(app.host + '/foo/3', 200, function () {
+            assert.statusCode(app.host + '/foo/300x200-top/3', 200, function () {
+                gm(compiled + '300x200-top/3').size(function (err, size) {
+                    assert(!err, err);
+                    assert.equal(size.width, 300);
+                    assert.equal(size.height, 200);
+                    app.server.close();
+                    done();
                 });
             });
         });
