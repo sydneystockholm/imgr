@@ -185,6 +185,30 @@ describe('Server', function () {
         });
     });
 
+    it('should create progressive jpegs', function (done) {
+        var app = server();
+        imgr({ interlace: 'Line' }).serve(images)
+            .namespace('/foo')
+            .cacheDir(compiled)
+            .using(app);
+        assert.statusCode(app.host + '/foo/300x500/1.jpg', 200, function () {
+            gm(compiled + '300x500/1.jpg').size(function (err, size) {
+                assert(!err, err);
+                assert.equal(size.width, 300);
+                assert.equal(size.height, 500);
+                assert.statusCode(app.host + '/foo/nested/folder/300x500/1.jpg', 200, function () {
+                    gm(compiled + 'nested/folder/300x500/1.jpg').size(function (err, size) {
+                        assert(!err, err);
+                        assert.equal(size.width, 300);
+                        assert.equal(size.height, 500);
+                        app.server.close();
+                        done();
+                    });
+                });
+            });
+        });
+    });
+
     it('should serve images with a custom width, height and orientation', function (done) {
         var app = server();
         imgr().serve(images)
