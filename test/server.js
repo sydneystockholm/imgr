@@ -62,6 +62,20 @@ describe('Server', function () {
         });
     });
 
+    it('should respond to HEAD requests', function (done) {
+        var app = server();
+        imgr().serve(images).using(app);
+        request({ method: 'HEAD', url: app.host + '/1.jpg' }, function (err, res, body) {
+            assert(!err, err);
+            assert.equal(res.statusCode, 200);
+            assert.equal(res.headers['content-type'], 'image/jpeg');
+            assert.equal(res.headers['content-length'], 70096);
+            assert(!body);
+            app.server.close();
+            done();
+        });
+    });
+
     it('should not serve images from the content directory if try_content is false', function (done) {
         var app = server();
         imgr({ try_content: false }).serve(images).using(app);
