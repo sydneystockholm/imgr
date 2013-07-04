@@ -257,7 +257,47 @@ describe('Server', function () {
         assert.statusCode(app.host + '/foo/300x300/1.jpg', 200, function () {
             assert.statusCode(app.host + '/foo/300x300-centre/1.jpg', 200, function () {
                 assert.statusCode(app.host + '/foo/200x/1.jpg', 200, function () {
-                    assert.statusCode(app.host + '/foo/300x/1.jpg', 403, function () {
+                    assert.statusCode(app.host + '/foo/200x300/1.jpg', 403, function () {
+                        assert.statusCode(app.host + '/foo/300x/1.jpg', 403, function () {
+                            app.server.close();
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    it('should allow for height wildcards in the whitelist', function (done) {
+        var app = server();
+        imgr().serve(images)
+            .namespace('/foo')
+            .cacheDir(compiled)
+            .whitelist([ '200x*' ])
+            .using(app);
+        assert.statusCode(app.host + '/foo/200x/1.jpg', 200, function () {
+            assert.statusCode(app.host + '/foo/200x1024/1.jpg', 200, function () {
+                assert.statusCode(app.host + '/foo/200x20/1.jpg', 200, function () {
+                    assert.statusCode(app.host + '/foo/100x200/1.jpg', 403, function () {
+                        app.server.close();
+                        done();
+                    });
+                });
+            });
+        });
+    });
+
+    it('should allow for width wildcards in the whitelist', function (done) {
+        var app = server();
+        imgr().serve(images)
+            .namespace('/foo')
+            .cacheDir(compiled)
+            .whitelist([ '*x200' ])
+            .using(app);
+        assert.statusCode(app.host + '/foo/x200/1.jpg', 200, function () {
+            assert.statusCode(app.host + '/foo/1024x200/1.jpg', 200, function () {
+                assert.statusCode(app.host + '/foo/20x200/1.jpg', 200, function () {
+                    assert.statusCode(app.host + '/foo/200x100/1.jpg', 403, function () {
                         app.server.close();
                         done();
                     });
