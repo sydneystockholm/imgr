@@ -23,13 +23,13 @@
     "optimisation"
   ],
   "dependencies": {
-    "gm": "*",
-    "mkdirp": "*",
-    "express": "*",
-    "ssasync": "*"
+    "gm": "latest",
+    "mkdirp": "latest",
+    "express": "latest",
+    "ssasync": "latest"
   },
   "devDependencies": {
-    "mocha": "*",
-    "request": "*"
+    "mocha": "latest",
+    "request": "latest"
   }
 }
