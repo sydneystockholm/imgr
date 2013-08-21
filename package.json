@@ -24,9 +24,9 @@
   ],
   "dependencies": {
     "gm": "latest",
-    "mkdirp": "latest",
-    "express": "latest",
-    "ssasync": "latest"
+    "mkdirp": "*",
+    "express": "~ 3",
+    "ssasync": "*"
   },
   "devDependencies": {
     "mocha": "latest",
