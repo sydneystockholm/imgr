@@ -1,4 +1,4 @@
-REPORTER?=progress
+REPORTER?=dot
 ifdef V
 	REPORTER=spec
 endif
@@ -13,7 +13,7 @@ dependencies:
 
 deps: dependencies
 
-test: deps
+test:
 	@rm -rf ./test/tmp
 	@./node_modules/mocha/bin/mocha \
 		--bail \
