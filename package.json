@@ -1,6 +1,6 @@
 {
   "name": "imgr",
-  "version": "0.8.3",
+  "version": "0.9.0",
   "author": "Sydney Stockholm <opensource@sydneystockholm.com>",
   "license": "MIT",
   "description": "Image resizing, cropping, optimisation and serving",
