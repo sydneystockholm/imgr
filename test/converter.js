@@ -6,7 +6,7 @@ var assert = require('assert')
 var images = __dirname + '/images/'
   , tmp = __dirname + '/tmp/';
 
-var imgr = new IMGR;
+var imgr = new IMGR();
 
 describe('Converter', function () {
 

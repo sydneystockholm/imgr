@@ -1,6 +1,5 @@
 var assert = require('assert')
   , gm = require('gm')
-  , fs = require('fs')
   , express = require('express')
   , request = require('request')
   , IMGR = require('../').IMGR;
@@ -21,7 +20,7 @@ function server() {
 }
 
 assert.statusCode = function (path, code, callback) {
-    request(path, function (err, res, body) {
+    request(path, function (err, res) {
         assert(!err, err);
         assert.equal(res.statusCode, code, path + ' failed (' + res.statusCode + ')');
         callback();
@@ -382,7 +381,7 @@ describe('Server', function () {
             imgr({ querystring_301: true }).serve(images)
                 .namespace('/foo')
                 .using(app);
-            request({ url: app.host + '/foo/1.jpg?foo', followRedirect: false }, function (err, res, body) {
+            request({ url: app.host + '/foo/1.jpg?foo', followRedirect: false }, function (err, res) {
                 assert(!err, err);
                 assert.equal(res.statusCode, 301);
                 app.server.close();
