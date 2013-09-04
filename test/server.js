@@ -99,6 +99,7 @@ describe('Server', function () {
                     gm(compiled + 'nested/folder/200x/1.jpg').size(function (err, size) {
                         assert(!err, err);
                         assert.equal(size.width, 200);
+                        assert.equal(size.height, 104);
                         app.server.close();
                         done();
                     });
@@ -121,6 +122,7 @@ describe('Server', function () {
                     gm(compiled + '200x/1.jpg').size(function (err, size) {
                         assert(!err, err);
                         assert.equal(size.width, 200);
+                        assert.equal(size.height, 104);
                         app.server.close();
                         done();
                     });
@@ -143,6 +145,7 @@ describe('Server', function () {
                     gm(compiled + 'nested/folder/x200/1.jpg').size(function (err, size) {
                         assert(!err, err);
                         assert.equal(size.height, 200);
+                        assert.equal(size.width, 384);
                         app.server.close();
                         done();
                     });
