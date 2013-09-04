@@ -23,10 +23,11 @@
     "optimisation"
   ],
   "dependencies": {
-    "gm": "latest",
+    "gm": "*",
     "mkdirp": "*",
     "express": "~ 3",
-    "ssasync": "*"
+    "ssasync": "*",
+    "imagesize": "*"
   },
   "devDependencies": {
     "mocha": "latest",

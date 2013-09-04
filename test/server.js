@@ -1,8 +1,8 @@
 var assert = require('assert')
-  , gm = require('gm')
   , express = require('express')
   , request = require('request')
-  , IMGR = require('../').IMGR;
+  , IMGR = require('../lib/imgr').IMGR
+  , imagesize = require('../lib/size');
 
 var images = __dirname + '/images/'
   , compiled = __dirname + '/tmp/compiled/';
@@ -91,11 +91,11 @@ describe('Server', function () {
             .cacheDir(compiled)
             .using(app);
         assert.statusCode(app.host + '/foo/200x/1.jpg', 200, function () {
-            gm(compiled + '200x/1.jpg').size(function (err, size) {
+            imagesize(compiled + '200x/1.jpg', function (err, size) {
                 assert(!err, err);
                 assert.equal(size.width, 200);
                 assert.statusCode(app.host + '/foo/nested/folder/200x/1.jpg', 200, function () {
-                    gm(compiled + 'nested/folder/200x/1.jpg').size(function (err, size) {
+                    imagesize(compiled + 'nested/folder/200x/1.jpg', function (err, size) {
                         assert(!err, err);
                         assert.equal(size.width, 200);
                         assert.equal(size.height, 104);
@@ -114,11 +114,11 @@ describe('Server', function () {
             .cacheDir(compiled)
             .using(app);
         assert.statusCode(app.host + '/foo/200x/1.jpg', 200, function () {
-            gm(compiled + '200x/1.jpg').size(function (err, size) {
+            imagesize(compiled + '200x/1.jpg', function (err, size) {
                 assert(!err, err);
                 assert.equal(size.width, 200);
                 assert.statusCode(app.host + '/foo/200x/1.jpg', 200, function () {
-                    gm(compiled + '200x/1.jpg').size(function (err, size) {
+                    imagesize(compiled + '200x/1.jpg', function (err, size) {
                         assert(!err, err);
                         assert.equal(size.width, 200);
                         assert.equal(size.height, 104);
@@ -137,11 +137,11 @@ describe('Server', function () {
             .cacheDir(compiled)
             .using(app);
         assert.statusCode(app.host + '/foo/x200/1.jpg', 200, function () {
-            gm(compiled + 'x200/1.jpg').size(function (err, size) {
+            imagesize(compiled + 'x200/1.jpg', function (err, size) {
                 assert(!err, err);
                 assert.equal(size.height, 200);
                 assert.statusCode(app.host + '/foo/nested/folder/x200/1.jpg', 200, function () {
-                    gm(compiled + 'nested/folder/x200/1.jpg').size(function (err, size) {
+                    imagesize(compiled + 'nested/folder/x200/1.jpg', function (err, size) {
                         assert(!err, err);
                         assert.equal(size.height, 200);
                         assert.equal(size.width, 384);
@@ -160,12 +160,12 @@ describe('Server', function () {
             .cacheDir(compiled)
             .using(app);
         assert.statusCode(app.host + '/foo/300x200/1.jpg', 200, function () {
-            gm(compiled + '300x200/1.jpg').size(function (err, size) {
+            imagesize(compiled + '300x200/1.jpg', function (err, size) {
                 assert(!err, err);
                 assert.equal(size.width, 300);
                 assert.equal(size.height, 200);
                 assert.statusCode(app.host + '/foo/nested/folder/300x200/1.jpg', 200, function () {
-                    gm(compiled + 'nested/folder/300x200/1.jpg').size(function (err, size) {
+                    imagesize(compiled + 'nested/folder/300x200/1.jpg', function (err, size) {
                         assert(!err, err);
                         assert.equal(size.width, 300);
                         assert.equal(size.height, 200);
@@ -184,12 +184,12 @@ describe('Server', function () {
             .cacheDir(compiled)
             .using(app);
         assert.statusCode(app.host + '/foo/300x400/1.jpg', 200, function () {
-            gm(compiled + '300x400/1.jpg').size(function (err, size) {
+            imagesize(compiled + '300x400/1.jpg', function (err, size) {
                 assert(!err, err);
                 assert.equal(size.width, 300);
                 assert.equal(size.height, 400);
                 assert.statusCode(app.host + '/foo/nested/folder/300x400/1.jpg', 200, function () {
-                    gm(compiled + 'nested/folder/300x400/1.jpg').size(function (err, size) {
+                    imagesize(compiled + 'nested/folder/300x400/1.jpg', function (err, size) {
                         assert(!err, err);
                         assert.equal(size.width, 300);
                         assert.equal(size.height, 400);
@@ -208,12 +208,12 @@ describe('Server', function () {
             .cacheDir(compiled)
             .using(app);
         assert.statusCode(app.host + '/foo/300x500/1.jpg', 200, function () {
-            gm(compiled + '300x500/1.jpg').size(function (err, size) {
+            imagesize(compiled + '300x500/1.jpg', function (err, size) {
                 assert(!err, err);
                 assert.equal(size.width, 300);
                 assert.equal(size.height, 500);
                 assert.statusCode(app.host + '/foo/nested/folder/300x500/1.jpg', 200, function () {
-                    gm(compiled + 'nested/folder/300x500/1.jpg').size(function (err, size) {
+                    imagesize(compiled + 'nested/folder/300x500/1.jpg', function (err, size) {
                         assert(!err, err);
                         assert.equal(size.width, 300);
                         assert.equal(size.height, 500);
@@ -232,12 +232,12 @@ describe('Server', function () {
             .cacheDir(compiled)
             .using(app);
         assert.statusCode(app.host + '/foo/300x200-top/1.jpg', 200, function () {
-            gm(compiled + '300x200-top/1.jpg').size(function (err, size) {
+            imagesize(compiled + '300x200-top/1.jpg', function (err, size) {
                 assert(!err, err);
                 assert.equal(size.width, 300);
                 assert.equal(size.height, 200);
                 assert.statusCode(app.host + '/foo/nested/folder/300x200-top/1.jpg', 200, function () {
-                    gm(compiled + 'nested/folder/300x200-top/1.jpg').size(function (err, size) {
+                    imagesize(compiled + 'nested/folder/300x200-top/1.jpg', function (err, size) {
                         assert(!err, err);
                         assert.equal(size.width, 300);
                         assert.equal(size.height, 200);
@@ -333,12 +333,12 @@ describe('Server', function () {
             .cacheDir(compiled)
             .using(app);
         assert.statusCode(app.host + '/foo/1-300x200-top.jpg', 200, function () {
-            gm(compiled + '1-300x200-top.jpg').size(function (err, size) {
+            imagesize(compiled + '1-300x200-top.jpg', function (err, size) {
                 assert(!err, err);
                 assert.equal(size.width, 300);
                 assert.equal(size.height, 200);
                 assert.statusCode(app.host + '/foo/nested/folder/1-300x200-top.jpg', 200, function () {
-                    gm(compiled + 'nested/folder/1-300x200-top.jpg').size(function (err, size) {
+                    imagesize(compiled + 'nested/folder/1-300x200-top.jpg', function (err, size) {
                         assert(!err, err);
                         assert.equal(size.width, 300);
                         assert.equal(size.height, 200);
@@ -359,7 +359,7 @@ describe('Server', function () {
             .using(app);
         assert.statusCode(app.host + '/foo/3', 200, function () {
             assert.statusCode(app.host + '/foo/300x200-top/3', 200, function () {
-                gm(compiled + '300x200-top/3').size(function (err, size) {
+                imagesize(compiled + '300x200-top/3', function (err, size) {
                     assert(!err, err);
                     assert.equal(size.width, 300);
                     assert.equal(size.height, 200);
