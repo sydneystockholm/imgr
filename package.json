@@ -31,6 +31,8 @@
   },
   "devDependencies": {
     "mocha": "latest",
-    "request": "latest"
+    "request": "latest",
+    "istanbul": "latest",
+    "jshint": "latest"
   }
 }
