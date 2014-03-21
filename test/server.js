@@ -390,5 +390,90 @@ describe('Server', function () {
         });
     });
 
+    /*
+    it('should serve images a configurable crop offset', function (done) {
+        var app = server();
+        imgr({ crop_offset: 10 }).serve(images)
+            .namespace('/foo')
+            .cacheDir(compiled)
+            .using(app);
+        assert.statusCode(app.host + '/foo/100x10-top/1.jpg', 200, function () {
+            imagesize(compiled + '100x10-top/1.jpg', function (err, size) {
+                assert(!err, err);
+                assert.equal(size.width, 100);
+                assert.equal(size.height, 10);
+                assert.statusCode(app.host + '/foo/100x10-bottom/1.jpg', 200, function () {
+                    imagesize(compiled + '100x10-bottom/1.jpg', function (err, size) {
+                        assert(!err, err);
+                        assert.equal(size.width, 100);
+                        assert.equal(size.height, 10);
+                        assert.statusCode(app.host + '/foo/100x100-left/1.jpg', 200, function () {
+                            imagesize(compiled + '100x100-left/1.jpg', function (err, size) {
+                                assert(!err, err);
+                                assert.equal(size.width, 100);
+                                assert.equal(size.height, 100);
+                                assert.statusCode(app.host + '/foo/100x100-right/1.jpg', 200, function () {
+                                    imagesize(compiled + '100x100-right/1.jpg', function (err, size) {
+                                        assert(!err, err);
+                                        assert.equal(size.width, 100);
+                                        assert.equal(size.height, 100);
+                                        app.server.close();
+                                        done();
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+    */
+
+    it('should ignore crop offset if the crop is too large', function (done) {
+        var app = server();
+        imgr({ crop_offset: 90 }).serve(images)
+            .namespace('/foo')
+            .cacheDir(compiled)
+            .using(app);
+        assert.statusCode(app.host + '/foo/100x10-top/1.jpg', 200, function () {
+            imagesize(compiled + '100x10-top/1.jpg', function (err, size) {
+                assert(!err, err);
+                assert.equal(size.width, 100);
+                assert.equal(size.height, 10);
+                assert.statusCode(app.host + '/foo/724x377-top/1.jpg', 200, function () {
+                    imagesize(compiled + '724x377-top/1.jpg', function (err, size) {
+                        assert(!err, err);
+                        assert.equal(size.width, 724);
+                        assert.equal(size.height, 377);
+                        assert.statusCode(app.host + '/foo/100x10-bottom/1.jpg', 200, function () {
+                            imagesize(compiled + '100x10-bottom/1.jpg', function (err, size) {
+                                assert(!err, err);
+                                assert.equal(size.width, 100);
+                                assert.equal(size.height, 10);
+                                assert.statusCode(app.host + '/foo/100x100-left/1.jpg', 200, function () {
+                                    imagesize(compiled + '100x100-left/1.jpg', function (err, size) {
+                                        assert(!err, err);
+                                        assert.equal(size.width, 100);
+                                        assert.equal(size.height, 100);
+                                        assert.statusCode(app.host + '/foo/100x100-right/1.jpg', 200, function () {
+                                            imagesize(compiled + '100x100-right/1.jpg', function (err, size) {
+                                                assert(!err, err);
+                                                assert.equal(size.width, 100);
+                                                assert.equal(size.height, 100);
+                                                app.server.close();
+                                                done();
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
 });
 
