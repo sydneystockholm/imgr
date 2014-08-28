@@ -102,5 +102,18 @@ describe('Converter', function () {
             });
     });
 
+    it('should handle PNG images with extra compressed data', function (done) {
+        imgr.load(images + 'extra-compressed.png')
+            .resizeToWidth(100)
+            .save(tmp + 'extra-100.png', function (err) {
+                assert(!err, err);
+                gm(tmp + 'extra-100.png').size(function (err, size) {
+                    assert(!err, err);
+                    assert.equal(size.width, 100);
+                    done();
+                });
+            });
+    });
+
 });
 
