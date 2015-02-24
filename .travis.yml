@@ -3,3 +3,7 @@ node_js:
   - "0.12"
   - "0.10"
   - "iojs"
+before_install:
+  - sudo add-apt-repository ppa:rwky/graphicsmagick/ubuntu -y
+  - sudo apt-get update -q
+  - sudo apt-get install graphicsmagick
