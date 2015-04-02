@@ -390,7 +390,6 @@ describe('Server', function () {
         });
     });
 
-    /*
     it('should serve images a configurable crop offset', function (done) {
         var app = server();
         imgr({ crop_offset: 10 }).serve(images)
@@ -428,7 +427,6 @@ describe('Server', function () {
             });
         });
     });
-    */
 
     it('should ignore crop offset if the crop is too large', function (done) {
         var app = server();
@@ -476,4 +474,3 @@ describe('Server', function () {
     });
 
 });
-
