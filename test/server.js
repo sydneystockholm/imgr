@@ -177,6 +177,30 @@ describe('Server', function () {
         });
     });
 
+    it('should serve images with a custom dimension', function (done) {
+        var app = server();
+        imgr().serve(images)
+            .namespace('/foo')
+            .cacheDir(compiled)
+            .using(app);
+        assert.statusCode(app.host + '/foo/300/1.jpg', 200, function () {
+            imagesize(compiled + '300/1.jpg', function (err, size) {
+                assert(!err, err);
+                assert.equal(size.width, 300);
+                assert.equal(size.height, 156);
+                assert.statusCode(app.host + '/foo/nested/folder/300/1.jpg', 200, function () {
+                    imagesize(compiled + 'nested/folder/300/1.jpg', function (err, size) {
+                        assert(!err, err);
+                        assert.equal(size.width, 300);
+                        assert.equal(size.height, 156);
+                        app.server.close();
+                        done();
+                    });
+                });
+            });
+        });
+    });
+
     it('should allow for a custom resize filter to be used', function (done) {
         var app = server();
         imgr({ filter: 'Gaussian' }).serve(images)
