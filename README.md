@@ -26,6 +26,17 @@ Now */path/to/images/foobar.jpg* can be accessed using
 - */images/200x300/foobar.jpg*
 - */images/1024x1024/foobar.jpg* => 403 forbidden
 
+Another interesting option instead of whitelist:
+
+```javascript
+
+...
+imgr.serve('/path/to/images')
+    .namespace('/images')
+    .urlRewrite('/:path/:size/:file.:ext')
+    .maxsize('500x600') // it works also with 500x, x600 or whatever
+    .using(express_app);
+```
 ### Installation
 
 ```bash
