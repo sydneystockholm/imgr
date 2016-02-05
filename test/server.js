@@ -61,6 +61,24 @@ describe('Server', function () {
         });
     });
 
+    it('should serve images under a RegExp configured namespace', function (done) {
+        var app = server();
+        var randomString = Math.random().toString(36).substr(2, 5);
+        imgr({ namespace: '/.*?'}).serve(images).using(app);
+        assert.statusCode(app.host + '/' + randomString + '/1.jpg', 200, function () {
+            assert.statusCode(app.host + '/' + randomString + '/nested/folder/1.jpg', 200, function () {
+                assert.statusCode(app.host + '/' + randomString + '/2.png', 200, function () {
+                    assert.statusCode(app.host + '/' + randomString + '/nothere.jpg', 404, function () {
+                        assert.statusCode(app.host + '/' + '/nothere.jpg', 404, function () {
+                            app.server.close();
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+
     it('should respond to HEAD requests', function (done) {
         var app = server();
         imgr().serve(images).using(app);
